@@ -36,4 +36,6 @@ target_include_directories(lichloader_launcher PRIVATE "${CMAKE_SOURCE_DIR}/src"
 target_link_libraries(lichloader_launcher shlwapi)
 
 set_target_properties(lichloader_launcher PROPERTIES OUTPUT_NAME "LichLoader")
-set_target_properties(lichloader_launcher PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
+# Trailing $<0:> suppresses the per-config subdir multi-config generators
+# (Visual Studio, Xcode) would otherwise append.
+set_target_properties(lichloader_launcher PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/$<0:>")
