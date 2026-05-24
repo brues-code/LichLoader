@@ -25,6 +25,12 @@ else()
 endif()
 
 target_compile_definitions(lichloader_launcher PRIVATE -DUNICODE -D_UNICODE -DWIN32_LEAN_AND_MEAN -D_CRT_SECURE_NO_WARNINGS)
+target_compile_definitions(lichloader_launcher PRIVATE
+	LL_VER_MAJOR=${LICHLOADER_VER_MAJOR}
+	LL_VER_MINOR=${LICHLOADER_VER_MINOR}
+	LL_VER_PATCH=${LICHLOADER_VER_PATCH}
+	LL_VER_BUILD=${LICHLOADER_VER_BUILD}
+)
 target_include_directories(lichloader_launcher PRIVATE "${CMAKE_SOURCE_DIR}/src")
 
 target_link_libraries(lichloader_launcher shlwapi)

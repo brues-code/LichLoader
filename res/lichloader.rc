@@ -1,1 +1,51 @@
+#include <winver.h>
+
+#ifndef LL_VER_MAJOR
+#define LL_VER_MAJOR 0
+#endif
+#ifndef LL_VER_MINOR
+#define LL_VER_MINOR 0
+#endif
+#ifndef LL_VER_PATCH
+#define LL_VER_PATCH 0
+#endif
+#ifndef LL_VER_BUILD
+#define LL_VER_BUILD 0
+#endif
+
+#define LL_STRINGIFY_(x) #x
+#define LL_STRINGIFY(x) LL_STRINGIFY_(x)
+#define LL_VER_STRING \
+	LL_STRINGIFY(LL_VER_MAJOR) "." \
+	LL_STRINGIFY(LL_VER_MINOR) "." \
+	LL_STRINGIFY(LL_VER_PATCH) "." \
+	LL_STRINGIFY(LL_VER_BUILD)
+
 IDI_ICON1 ICON "lichloader.ico"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION    LL_VER_MAJOR,LL_VER_MINOR,LL_VER_PATCH,LL_VER_BUILD
+ PRODUCTVERSION LL_VER_MAJOR,LL_VER_MINOR,LL_VER_PATCH,LL_VER_BUILD
+ FILEFLAGSMASK  VS_FFI_FILEFLAGSMASK
+ FILEFLAGS      0
+ FILEOS         VOS__WINDOWS32
+ FILETYPE       VFT_APP
+ FILESUBTYPE    VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "FileDescription",  "LichLoader - WoW 3.3.5a DLL injection launcher"
+            VALUE "FileVersion",      LL_VER_STRING
+            VALUE "InternalName",     "LichLoader"
+            VALUE "OriginalFilename", "LichLoader.exe"
+            VALUE "ProductName",      "LichLoader"
+            VALUE "ProductVersion",   LL_VER_STRING
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

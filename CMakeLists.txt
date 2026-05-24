@@ -16,6 +16,17 @@ endif()
 
 project(lichloader LANGUAGES C)
 
+# Four-part Win32 file version (MAJOR.MINOR.PATCH.BUILD). CI overrides via
+# -DLICHLOADER_VERSION=...; local builds get 0.0.0.0.
+set(LICHLOADER_VERSION "0.0.0.0" CACHE STRING "Four-part version MAJOR.MINOR.PATCH.BUILD")
+if(NOT LICHLOADER_VERSION MATCHES "^([0-9]+)\\.([0-9]+)\\.([0-9]+)\\.([0-9]+)$")
+	message(FATAL_ERROR "LICHLOADER_VERSION must be MAJOR.MINOR.PATCH.BUILD (got '${LICHLOADER_VERSION}')")
+endif()
+set(LICHLOADER_VER_MAJOR ${CMAKE_MATCH_1})
+set(LICHLOADER_VER_MINOR ${CMAKE_MATCH_2})
+set(LICHLOADER_VER_PATCH ${CMAKE_MATCH_3})
+set(LICHLOADER_VER_BUILD ${CMAKE_MATCH_4})
+
 # WoW 3.3.5a is 32-bit; CreateRemoteThread(LoadLibraryW) requires the launcher
 # to share bitness with the target, so a 64-bit build cannot work.
 if(NOT CMAKE_SIZEOF_VOID_P EQUAL 4)

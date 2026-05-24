@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up MSVC (x86)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x86
+
+      - name: Determine version
+        id: ver
+        shell: pwsh
+        run: |
+          if ("${{ github.ref }}" -match '^refs/tags/v(\d+)\.(\d+)\.(\d+)$') {
+            $base = "$($Matches[1]).$($Matches[2]).$($Matches[3])"
+          } else {
+            $base = "0.0.0"
+          }
+          $full = "$base.${{ github.run_number }}"
+          "version=$full" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "LICHLOADER_VERSION=$full"
+
+      - name: Configure
+        run: cmake -B build -A Win32 "-DLICHLOADER_VERSION=${{ steps.ver.outputs.version }}"
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Upload LichLoader.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: LichLoader
+          path: bin/LichLoader.exe
+          if-no-files-found: error
