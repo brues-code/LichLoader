@@ -9,8 +9,6 @@ It ships as two files:
 - **`LichLoader.exe`** — the launcher. Injects the DLLs and starts the game.
 - **`LichCore.dll`** — a tiny coordinator, injected automatically before your DLLs. It gives each DLL an optional, ordered, post-boot initialization callback (`Load()`). DLLs that only install hooks from `DllMain` don't need it and are unaffected.
 
-It is a stripped-down fork of the loader half of [VanillaFixes](https://github.com/hannesmann/vanillafixes), retargeted for 3.3.5a.
-
 ## How it works
 
 **Launcher (`LichLoader.exe`), while the game is suspended:**
@@ -80,10 +78,10 @@ extern "C" __declspec(dllexport) unsigned long __cdecl Load(void) {
 
 ## Compatibility with awesome_wotlk
 
-[awesome_wotlk](https://github.com/FrostAtom/awesome_wotlk) is a popular set of engine extensions and Lua API additions for 3.3.5a, distributed as a single DLL. LichLoader is fully compatible with it — drop `awesome_wotlk.dll` next to `WoW.exe` and reference it in `lichloader.txt`:
+[awesome_wotlk](https://github.com/FrostAtom/awesome_wotlk) is a popular set of engine extensions and Lua API additions for 3.3.5a, distributed as a single DLL. LichLoader is fully compatible with it — drop `AwesomeWotlkLib.dll` next to `WoW.exe` and reference it in `lichloader.txt`:
 
 ```
-awesome_wotlk.dll
+AwesomeWotlkLib.dll
 ```
 
 That's all. It installs its hooks from `DllMain` while the main thread is still suspended (no `Load()` needed), so they're in place before the engine starts — exactly as if it were loaded by any other launcher.
