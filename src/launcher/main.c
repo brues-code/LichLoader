@@ -55,8 +55,22 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 		L"This issue can occur if you have enabled compatibility mode on the WoW executable.",
 		GetLastErrorMessage());
 
-	// Inject in the order listed in lichloader.txt; each DLL's DllMain runs before ResumeThread
+	// Inject the LichCore coordinator first (a built-in, next to LichLoader.exe),
+	// so its game-init hook is in place before consumer DllMains run. Its absence
+	// is non-fatal: DLLs still load, but their Load() callbacks won't fire.
 	int injectError = 0;
+	LPWSTR pCorePath = malloc(MAX_PATH * sizeof(WCHAR));
+	PathCombine(pCorePath, pWowDirectory, L"LichCore.dll");
+	if(GetFileAttributes(pCorePath) != INVALID_FILE_ATTRIBUTES) {
+		injectError = RemoteLoadLibrary(pCorePath, processInfo.hProcess);
+	}
+	else {
+		MessageBoxF(L"LichCore.dll was not found next to LichLoader.exe.\r\n"
+			L"DLLs will still load, but their Load() callbacks will not run.");
+	}
+	free(pCorePath);
+
+	// Inject in the order listed in lichloader.txt; each DLL's DllMain runs before ResumeThread
 	for(int i = 0; i < dllListData.nAdditionalDLLs; i++) {
 		injectError = injectError || RemoteLoadLibrary(dllListData.pAdditionalDLLs[i], processInfo.hProcess);
 	}

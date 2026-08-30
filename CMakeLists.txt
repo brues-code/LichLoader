@@ -37,3 +37,4 @@ if(NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
 endif()
 
 add_subdirectory(src/launcher)
+add_subdirectory(src/dll)
